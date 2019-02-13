@@ -1,0 +1,262 @@
+'.text.xml':
+
+    'Create View Set for Master Data':
+        'prefix': 'odoo_view_set_master'
+        'body': """
+            <record id="${1:xml_model_name}_view_tree" model="ir.ui.view">
+                <field name="name">${2:model.name} tree</field>
+                <field name="model">${2:model.name}</field>
+                <field name="arch" type="xml">
+                    <tree>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </tree>
+                </field>
+            </record>
+
+            <record id="${1:xml_model_name}_view_form" model="ir.ui.view">
+                <field name="name">${2:model.name} form</field>
+                <field name="model">${2:model.name}</field>
+                <field name="arch" type="xml">
+                    <form>
+                        <header>
+                        </header>
+                        <group name="header_1" colspan="4" col="2">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                        </group>
+                        <notebook>
+                            <page name="note" string="Note">
+                                <field name="note"/>
+                            </page>
+                        </notebook>
+                    </form>
+                </field>
+            </record>
+
+            <record id="${1:xml_model_name}_view_search" model="ir.ui.view">
+                <field name="name">${2:model.name} search</field>
+                <field name="model">${2:model.name}</field>
+                <field name="arch" type="xml">
+                    <search>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </search>
+                </field>
+            </record>
+
+            <record id="${1:xml_model_name}_action" model="ir.actions.act_window">
+                <field name="name">${3:ActionName}</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">${2:model.name}</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="search_view_id" ref="${1:xml_model_name}_view_search"/>
+            </record>
+
+            <menuitem
+                id="${1:xml_model_name}_type_menu"
+                name="${3:ActionName}"
+                parent="${4:parent_xml_id}"
+                action="${1:xml_model_name}_action"
+                sequence="${5:1}"
+                />
+        """
+
+    'Create View Set for Master Data With Sequence':
+        'prefix': 'odoo_view_set_master_sequence'
+        'body': """
+            <record id="${1:xml_model_name}_view_tree" model="ir.ui.view">
+                <field name="name">${2:model.name} tree</field>
+                <field name="model">${2:model.name}</field>
+                <field name="arch" type="xml">
+                    <tree>
+                        <field name="sequence" widget="handle"/>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </tree>
+                </field>
+            </record>
+
+            <record id="${1:xml_model_name}_view_form" model="ir.ui.view">
+                <field name="name">${2:model.name} form</field>
+                <field name="model">${2:model.name}</field>
+                <field name="arch" type="xml">
+                    <form>
+                        <header>
+                        </header>
+                        <group name="header_1" colspan="4" col="2">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                        <notebook>
+                            <page name="note" string="Note">
+                                <field name="note"/>
+                            </page>
+                        </notebook>
+                    </form>
+                </field>
+            </record>
+
+            <record id="${1:xml_model_name}_view_search" model="ir.ui.view">
+                <field name="name">${2:model.name} search</field>
+                <field name="model">${2:model.name}</field>
+                <field name="arch" type="xml">
+                    <search>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </search>
+                </field>
+            </record>
+
+            <record id="${1:xml_model_name}_action" model="ir.actions.act_window">
+                <field name="name">${3:ActionName}</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">${2:model.name}</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="search_view_id" ref="${1:xml_model_name}_view_search"/>
+            </record>
+
+            <menuitem
+                id="${1:xml_model_name}_type_menu"
+                name="${3:ActionName}"
+                parent="${4:parent_xml_id}"
+                action="${1:xml_model_name}_action"
+                sequence="${5:1}"
+                />
+        """
+
+    'Create View Set for Transaction Data':
+        'prefix': 'odoo_view_set_transaction'
+        'body': """
+            <record id="${1:xml_model_name}_view_tree" model="ir.ui.view">
+                <field name="name">${2:model.name} tree</field>
+                <field name="model">${2:model.name}</field>
+                <field name="arch" type="xml">
+                    <tree>
+                        <field name="name"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="state"/>
+                    </tree>
+                </field>
+            </record>
+
+            <record id="${1:xml_model_name}_view_form" model="ir.ui.view">
+                <field name="name">${2:model.name} form</field>
+                <field name="model">${2:model.name}</field>
+                <field name="arch" type="xml">
+                    <form>
+                        <header>
+                            <button name="button_confirm" string="Confirm" class="oe_highlight" type="object" attrs="{'invisible':['|',('state','!=','draft'),('confirm_ok','=',False)]}" confirm="Confirm ${3:ActionName}. Are you sure?"/>
+                            <button name="button_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible':['|',('state','!=','confirm'),('approve_ok','=',False)]}" confirm="Approve ${3:ActionName}. Are you sure?"/>
+                            <button name="button_${6:open}" string="${8:Open}" class="oe_highlight" type="object" attrs="{'invisible':['|',('state','!=','${6:open}'),('${6:open}_ok','=',False)]}" confirm="${8:Open} ${3:ActionName}. Are you sure?"/>
+                            <button name="button_${7:done}" string="${9:Done}" class="oe_highlight" type="object" attrs="{'invisible':['|',('state','!=','${7:done}'),('${7:done}_ok','=',False)]}" confirm="${9:Finish} ${3:ActionName}. Are you sure?"/>
+                            <button name="button_restart" string="Set to Draft" class="oe_highlight" type="object" attrs="{'invisible':['|',('state','!=','cancel'),('restart_ok','=',False)]}" confirm="Reset ${3:ActionName}. Are you sure?"/>
+                            <field name="state" string="State" widget="statusbar" statusbar_visible="draft,confirm,approve,${6:open}"/>
+                        </header>
+                        <sheet>
+                            <div class="oe_right oe_button_box" style="width: 300px;" name="buttons">
+                            </div>
+                            <div class="oe_left" style="width: 500px;">
+                                <div class="oe_title" style="width: 500px;">
+                                    <label for="name"/>
+                                    <h1>
+                                        <field name="name"/>
+                                    </h1>
+                                    <h2 attrs="{'invisible': [('state', '!=', 'cancel')]}">
+                                        <label for="cancel_reason_id" string="Cancellation reason:"/>
+                                        <field name="cancel_reason_id" class="oe_inline"/>
+                                    </h2>
+                                </div>
+                            </div>
+                            <group name="header_1" colspan="4" col="2">
+                                <group name="header_1_1" colspan="1" col="2">
+                                    <field name="company_id" groups="base.group_multi_company"/>
+                                </group>
+                                <group name="header_1_2" colspan="1" col="2">
+                                </group>
+                            </group>
+                            <notebook>
+                                <page name="note" string="Note">
+                                    <field name="note"/>
+                                </page>
+                                <page name="log" string="Log" groups="base.group_system">
+                                    <group name="group_log_1" colspan="4" col="3">
+                                        <field name="confirm_date" string="Confirm"/>
+                                        <field name="confirm_user_id" nolabel="1"/>
+                                        <field name="approve_date" string="Approve"/>
+                                        <field name="approve_user_id" nolabel="1"/>
+                                        <field name="${6:open}_date" string="${8:Open}"/>
+                                        <field name="${6:open}_user_id" nolabel="1"/>
+                                        <field name="${7:done}_date" string="${9:Done}"/>
+                                        <field name="${7:done}_user_id" nolabel="1"/>
+                                        <field name="cancel_date" string="Cancel"/>
+                                        <field name="cancel_user_id" nolabel="1"/>
+                                    </group>
+                                </page>
+                                <page name="policy" string="Policy" groups="base.group_system">
+                                    <group name="policy_1" colspan="4" col="2">
+                                        <field name="confirm_ok"/>
+                                        <field name="approve_ok"/>
+                                        <field name="${6:open}_ok"/>
+                                        <field name="${7:done}_ok"/>
+                                        <field name="cancel_ok"/>
+                                        <field name="restart_ok"/>
+                                    </group>
+                                </page>
+                            </notebook>
+                        </sheet>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </form>
+                </field>
+            </record>
+
+            <record id="${1:xml_model_name}_view_search" model="ir.ui.view">
+                <field name="name">${2:model.name} search</field>
+                <field name="model">${2:model.name}</field>
+                <field name="arch" type="xml">
+                    <search>
+                        <field name="name"/>
+                        <field name="state"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <group name="grp_state" string="State">
+                            <filter name="dom_draft" string="Draft" domain="[('state','=','draft')]"/>
+                            <filter name="dom_confirm" string="Waiting for Approval" domain="[('state','=','confirm')]"/>
+                            <filter name="dom_approve" string="Approved" domain="[('state','=','approve')]"/>
+                            <filter name="dom_${6:open}" string="${8:Open}" domain="[('state','=','${6:open}')]"/>
+                            <filter name="dom_${7:done}" string="${9:Done}" domain="[('state','=','${7:done}')]"/>
+                            <filter name="dom_cancel" string="Cancelled" domain="[('state','=','cancel')]"/>
+                        </group>
+                        <group name="grp_group" string="Group By..">
+                            <filter name="grp_company" string="Company" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                            <filter name="grp_state" string="State" context="{'group_by':'state'}"/>
+                        </group>
+                    </search>
+                </field>
+            </record>
+
+            <record id="${1:xml_model_name}_action" model="ir.actions.act_window">
+                <field name="name">${3:ActionName}</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">${2:model.name}</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="search_view_id" ref="${1:xml_model_name}_view_search"/>
+                <field name="context">{'search_default_dom_draft':1,'search_default_dom_confirm':1,'search_default_dom_approve':1,'search_default_dom_${6:open}':1}</field>
+            </record>
+
+            <menuitem
+                id="${1:xml_model_name}_type_menu"
+                name="${3:ActionName}"
+                parent="${4:parent_xml_id}"
+                action="${1:xml_model_name}_action"
+                sequence="${5:1}"
+                />
+        """

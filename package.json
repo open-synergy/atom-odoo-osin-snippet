@@ -1,0 +1,19 @@
+{
+  "name": "odoo-osin-snippet",
+  "main": "./lib/main",
+  "version": "0.1.0",
+  "description": "Snippets for the Odoo software development for OpenSynergy",
+  "keywords": [
+    "snippets",
+    "odoo",
+    "python",
+    "xml"
+  ],
+  "activationCommands": {},
+  "repository": "https://github.com/open-synergy/atom-odoo-osin-snippet",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {}
+}
